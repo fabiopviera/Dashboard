@@ -1,0 +1,125 @@
+---
+title: "Brazil"
+output: 
+  flexdashboard::flex_dashboard:
+    orientation: rows
+---
+
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+libs <- c("shiny","tidyverse",
+          "lubridate","shinydashboard", "flexdashboard","readxl",
+          "geobr","sf","ggplot2","readr","dplyr","ggExtra","gifski",
+          "gganimate","ggplotlyExtra","ggthemes","ggridges","plotly")
+lapply(libs, require, character.only = TRUE)
+rm(libs)
+
+projecao <- read_csv2(
+  file = "https://raw.githubusercontent.com/jonates/opendata/master/projecao_IBGE_2018/projecao_IBGE_2018_atualizada06042020.csv",
+  locale = locale(encoding = "ISO-8859-1")
+)
+
+
+dat.1 <- read_xlsx("atlas2013_dadosbrutos_pt.xlsx",sheet = 2)
+
+dat.2 <- read_xlsx("Diagnosticos_secundarios_presentes.xlsx")
+```
+
+
+
+SIHSUS {data-icon="fas fa-hospital"}
+=============================
+
+
+Row
+-----------------------------------------------------
+
+
+### TOTAL HOSPITALS - SUS
+```{r,echo = FALSE }
+  valueBox(value = "xxx",icon = "fas fa-hospital",caption = "TOTAL HOSPITALS - 100% SUS", color = rgb(1,0,0.2))
+```
+
+
+###  TOTAL PRIVATE HOSPITALS 
+```{r,echo = FALSE }
+  valueBox(value = "xxx",icon = "fas fa-hospital",caption = "TOTAL PRIVATE HOSPITALS", color = rgb(0.5,0.6,0.5))
+```
+
+
+### TOTAL MIXED HOSPITALS (PUBLIC AND PRIVATE)
+```{r,echo = FALSE }
+valueBox(value = "xxxx",icon = "fas fa-hospital",caption = "TOTAL MIXED HOSPITALS (PUBLIC AND PRIVATE)",color = rgb(0.8,0.2,0.9))
+```
+
+
+Row  
+----------------------------------
+
+### **EVOLUTION OF THE NUMBER OF VARIABLES IN THE SIHSUS DATABASE**
+
+```{r,echo = FALSE}
+dat.ano <- data.frame(Ano=(c(1992,1993,1994,1995,1996,1997, 1998,1999, 2000, 2001,2002,2003,2004, 2005, 2006,2007,2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020)),
+        Variavel=c(           35,  35,  39,  41,  41,  42,   41,  52,   60,   60,  65,  68,  69,   69,   75,  75,   86, 86,   86, 93,  93,   95,  113, 113, 113, 113, 113, 113, 113))
+dat.ano  %>%
+  ggplot( aes(x=factor(Ano), y=Variavel, group = 1)) +
+  geom_line(color="black",size=1) + 
+  xlab("YEAR")+
+  ylab("NUMBER OF VARIABLES")+
+  geom_point( shape=21, color="black", fill="chartreuse1", size=3) +
+  geom_text(aes(label = paste(Variavel)), parse = TRUE,
+            vjust = -0.3,hjust =1.7,size=2,angle=-45)+
+  scale_y_continuous(
+    limits = c(33, 114),
+    breaks = seq(33, 114, 10))+
+  theme_minimal()+theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=2))
+
+```
+
+
+
+
+
+
+
+
+Descritive {data-icon="fas fa-globe-americas"}
+=============================
+
+### **PRESENCE RATE OF SECUNDARY DIAGNOSIS**
+
+```{r,echo = FALSE}
+ggplotly(
+  ggplot(filter(dat.2,DIAG_SECUN=="PRESENTE"), aes(x = ANO  , y = PROP, color = REGIAO, group = ESTADO )) +
+  geom_point(size=2)+
+  geom_line(aes(x = ANO  , y = PROP),size=1) +
+  labs(title = " ",
+       x = "YEAR",
+       y = "PRESENCE OF SECUNDARY DIAGNOSIS (%)",
+       color = "REGION")+scale_y_continuous(
+    limits = c(5, 46),
+    breaks = seq(5, 46, 2))+
+  theme_minimal())
+```
+
+
+### **AIH TOTAL BY YEAR**
+
+```{r,echo = FALSE }
+ggplotly(filter(dat.2,DIAG_SECUN=="PRESENTE") %>% rename(AIHs=SOMA)%>%
+  ggplot(aes(x = ANO  , y = AIHs, color = REGIAO, group = ESTADO )) +
+    geom_point(size=2)+
+    geom_line(aes(x = ANO  , y = AIHs),size=1) +
+    labs(title = " ",
+         x = "YEAR",
+         y = "TOTAL AIHs",
+         color = "REGION")+scale_y_continuous(
+           limits = c(27269, 2606482),
+           breaks = seq(27269, 2606482, 100000))+
+    theme_minimal())
+```
+
+
+
