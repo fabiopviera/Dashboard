@@ -105,7 +105,7 @@ ggplotly(
 ```
 
 
-### **AIH TOTAL BY YEAR**
+### **TOTAL AIHs BY YEAR**
 
 ```{r,echo = FALSE }
 ggplotly(filter(dat.2,DIAG_SECUN=="PRESENTE") %>% rename(AIHs=SOMA)%>%
