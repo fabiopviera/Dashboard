@@ -79,6 +79,12 @@ dat.ano  %>%
 ```
 
 
+### **EVOLUTION OF THE NUMBER OF VARIABLES IN THE SIHSUS DATABASE**
+
+```{r,echo = FALSE}
+valueBox(value = "xxxx",icon = "fas fa-hospital",caption = "TOTAL MIXED HOSPITALS (PUBLIC AND PRIVATE)",color = rgb(0.8,0.2,0.9))
+```
+
 
 
 
