@@ -1,8 +1,7 @@
 ---
 title: "Brazil"
 output: 
-  flexdashboard::flex_dashboard:
-    orientation: rows
+  flexdashboard::flex_dashboard
 ---
 
 
@@ -25,78 +24,89 @@ projecao <- read_csv2(
 dat.1 <- read_xlsx("atlas2013_dadosbrutos_pt.xlsx",sheet = 2)
 
 dat.2 <- read_xlsx("Diagnosticos_secundarios_presentes.xlsx")
+
+dat.3 <- read_xlsx("ESTAB_COM_LEITOS_NATUREZA_ATIVOS.xlsx",sheet = 2)
 ```
 
 
 
-SIHSUS {data-icon="fas fa-hospital"}
+PAGE 1 {data-orientation=rows data-icon="fas fa-hospital"}
 =============================
 
+Row 
+----------------
 
-Row
------------------------------------------------------
-
-
-### TOTAL ESTABLISHMENT - SUS
+### TOTAL ESTABLISHMENT - SUS 
 ```{r,echo = FALSE }
-  valueBox(value = "122,724",icon = "fas fa-hospital",caption = "TOTAL ESTABLISHMENT - SUS (COMPETENCE 04/2021)", color = rgb(1,0,0.2))
+  valueBox(value = "122,724",icon = "fas fa-hospital",caption = "TOTAL FACILITIES - SUS (COMPETENCE 04/2021)", color = rgb(1,0,0.2))
 ```
 
 
 ###  TOTAL ESTABLISHMENTS WITH BEDS
 ```{r,echo = FALSE }
-  valueBox(value = "8,763",icon = "fas fa-hospital",caption = "TOTAL ESTABLISHMENTS WITH BEDS (COMPETENCE 04/2021)", color = rgb(0.5,0.6,0.5))
+  valueBox(value = "8,763",icon = "fas fa-hospital",caption = "TOTAL FACILITIES WITH BEDS (COMPETENCE 04/2021)", color = rgb(0.5,0.6,0.5))
 ```
 
 
 ### TOTAL ESTABLISHMENTS WITH HOSPITAL CHARACTERISTICS
 ```{r,echo = FALSE }
-valueBox(value = "5,508",icon = "fas fa-hospital",caption = "TOTAL ESTABLISHMENTS WITH HOSPITAL CHARACTERISTICS (COMPETENCE 04/2021)",color = rgb(0.8,0.2,0.9))
+valueBox(value = "5,508",icon = "fas fa-hospital",caption = "TOTAL FACILITIES WITH HOSPITAL CHARACTERISTICS (COMPETENCE 04/2021)",color = rgb(0.8,0.2,0.9))
 ```
 
 
-Row
-----------------------------------
 
-### **EVOLUTION OF THE NUMBER OF VARIABLES IN THE SIHSUS DATABASE**
+Row 
+--------------------------
+
+### **FACILITIES WITH BEDS AND FACILITIES WITH HOSPITAL CHARACTERISTICS**
 
 ```{r,echo = FALSE}
-dat.ano <- data.frame(Ano=(c(1992,1993,1994,1995,1996,1997, 1998,1999, 2000, 2001,2002,2003,2004, 2005, 2006,2007,2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020)),
-        Variavel=c(           35,  35,  39,  41,  41,  42,   41,  52,   60,   60,  65,  68,  69,   69,   75,  75,   86, 86,   86, 93,  93,   95,  113, 113, 113, 113, 113, 113, 113))
-dat.ano  %>%
-  ggplot( aes(x=factor(Ano), y=Variavel, group = 1)) +
-  geom_line(color="black",size=1) + 
-  xlab("YEAR")+
-  ylab("NUMBER OF VARIABLES")+
-  geom_point( shape=21, color="black", fill="chartreuse1", size=3) +
-  geom_text(aes(label = paste(Variavel)), parse = TRUE,
-            vjust = -0.3,hjust =1.7,size=2,angle=-45)+
-  scale_y_continuous(
-    limits = c(33, 114),
-    breaks = seq(33, 114, 10))+
-  theme_minimal()+theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=2))
+dd1 <- data.frame(x=c("PUBLIC","PRIVATE","NON-PROFIT"),y=c(2799,1171,1538))
+dd <- data.frame(x=c("PUBLIC","PRIVATE","NON-PROFIT"),y=c(3982,2878,1903))
+
+fig <- plot_ly()
+fig <- fig %>% add_pie(data = dd, labels = ~x, values = ~y,hole=0.6,
+                       textposition = 'inside',
+                       textinfo = 'label+percent',
+                       insidetextfont = list(color = '#FFFFFF'),
+                       name = "WITH BEDS", domain = list(x = c(0, 0.45), y = c(0, 1)))
+fig <- fig %>% add_pie(data = dd1, labels = ~x, values = ~y,hole=0.6,
+                       textposition = 'inside',
+                       textinfo = 'label+percent',
+                       insidetextfont = list(color = '#FFFFFF'),
+                       name = "HOSPITAL CHARAC", domain = list(x = c(0.5, 0.95), y = c(0, 1)))
+fig <- fig %>% layout(title = "", showlegend = F,
+                      xaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE),
+                      yaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE))
+fig
 
 ```
 
 
-### **EVOLUTION OF THE NUMBER OF VARIABLES IN THE SIHSUS DATABASE**
+
+
+### **FACILITIES WITH HOSPITAL CHARACTERISTICS > 5 BEDS**
 
 ```{r,echo = FALSE}
-dat.ano <- data.frame(Ano=(c(1992,1993,1994,1995,1996,1997, 1998,1999, 2000, 2001,2002,2003,2004, 2005, 2006,2007,2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020)),
-        Variavel=c(           35,  35,  39,  41,  41,  42,   41,  52,   60,   60,  65,  68,  69,   69,   75,  75,   86, 86,   86, 93,  93,   95,  113, 113, 113, 113, 113, 113, 113))
-dat.ano  %>%
-  ggplot( aes(x=factor(Ano), y=Variavel, group = 1)) +
-  geom_line(color="black",size=1) + 
-  xlab("YEAR")+
-  ylab("NUMBER OF VARIABLES")+
-  geom_point( shape=21, color="black", fill="chartreuse1", size=3) +
-  geom_text(aes(label = paste(Variavel)), parse = TRUE,
-            vjust = -0.3,hjust =1.7,size=2,angle=-45)+
-  scale_y_continuous(
-    limits = c(33, 114),
-    breaks = seq(33, 114, 10))+
-  theme_minimal()+theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=2))
+dat.leito <- dat.3 %>% filter(LEITOS_EXISTENTES>5) %>% group_by(LEITO) %>% summarise(count=n())
 
+dat.leito1 <- dat.3 %>% filter(LEITOS_EXISTENTES>5) %>% group_by(TIPO_UNIDADE) %>% summarise(count=n())
+
+fig1 <- plot_ly()
+fig1 <- fig1 %>% add_pie(data = dat.leito, labels = ~LEITO, values = ~count,hole=0.6,
+                       textposition = 'inside',
+                       textinfo = 'label+percent',
+                       insidetextfont = list(color = '#FFFFFF'),
+                       name = "TYPE OF BEDS", domain = list(x = c(0, 0.45), y = c(0, 1)))
+fig1 <- fig1 %>% add_pie(data = dat.leito1, labels = ~TIPO_UNIDADE, values =~count,hole=0.6,
+                       textposition = 'inside',
+                       textinfo = 'label+percent',
+                       insidetextfont = list(color = '#FFFFFF'),
+                       name = "TYPE OF FACILITIES", domain = list(x = c(0.5, 0.95), y = c(0, 1)))
+fig1 <- fig1 %>% layout(title = "", showlegend = F,
+                      xaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE),
+                      yaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE))
+fig1
 ```
 
 
@@ -104,8 +114,53 @@ dat.ano  %>%
 
 
 
-Descritive {data-icon="fas fa-globe-americas"}
+PAGE 2 {data-orientation=colmns data-icon="fas fa-hospital"}
 =============================
+
+Column 
+--------------------------
+
+### **EVOLUTION OF THE NUMBER OF VARIABLES IN THE SIHSUS DATABASE**
+
+```{r,echo = FALSE}
+dat.ano <- data.frame(Ano=(c(1992,1993,1994,1995,1996,1997, 1998,1999, 2000, 2001,2002,2003,2004, 2005, 2006,2007,2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020)),
+        Variavel=c(           35,  35,  39,  41,  41,  42,   41,  52,   60,   60,  65,  68,  69,   69,   75,  75,   86, 86,   86, 93,  93,   95,  113, 113, 113, 113, 113, 113, 113))
+dat.ano  %>%
+  ggplot( aes(x=factor(Ano), y=Variavel, group = 1)) +
+  geom_line(color="black",size=1) + 
+  xlab("YEAR")+
+  ylab("NUMBER OF VARIABLES")+
+  geom_point( shape=21, color="black", fill="chartreuse1", size=3) +
+  geom_text(aes(label = paste(Variavel)), parse = TRUE,
+            vjust = -0.3,hjust =1.7,size=2,angle=-45)+
+  scale_y_continuous(
+    limits = c(33, 114),
+    breaks = seq(33, 114, 10))+
+  theme_minimal()+theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=2))
+
+```
+
+Column {.tabset .tabset-fade}
+--------------------------
+
+### **TOTAL AIHs BY YEAR**
+
+```{r,echo = FALSE }
+ggplotly(filter(dat.2,DIAG_SECUN=="PRESENTE") %>% rename(AIHs=SOMA)%>%
+  ggplot(aes(x = ANO  , y = AIHs, color = REGIAO, group = ESTADO )) +
+    geom_point(size=2)+
+    geom_line(aes(x = ANO  , y = AIHs),size=1) +
+    labs(title = " ",
+         x = "YEAR",
+         y = "TOTAL AIHs",
+         color = "REGION")+scale_y_continuous(
+           limits = c(27269, 2606482),
+           breaks = seq(27269, 2606482, 100000))+
+    theme_minimal())
+```
+
+
+
 
 ### **PRESENCE RATE OF SECUNDARY DIAGNOSIS**
 
@@ -123,22 +178,6 @@ ggplotly(
   theme_minimal())
 ```
 
-
-### **TOTAL AIHs BY YEAR**
-
-```{r,echo = FALSE }
-ggplotly(filter(dat.2,DIAG_SECUN=="PRESENTE") %>% rename(AIHs=SOMA)%>%
-  ggplot(aes(x = ANO  , y = AIHs, color = REGIAO, group = ESTADO )) +
-    geom_point(size=2)+
-    geom_line(aes(x = ANO  , y = AIHs),size=1) +
-    labs(title = " ",
-         x = "YEAR",
-         y = "TOTAL AIHs",
-         color = "REGION")+scale_y_continuous(
-           limits = c(27269, 2606482),
-           breaks = seq(27269, 2606482, 100000))+
-    theme_minimal())
-```
 
 
 
