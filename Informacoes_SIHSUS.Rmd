@@ -37,25 +37,25 @@ Row
 -----------------------------------------------------
 
 
-### TOTAL HOSPITALS - SUS
+### TOTAL ESTABLISHMENT - SUS
 ```{r,echo = FALSE }
-  valueBox(value = "xxx",icon = "fas fa-hospital",caption = "TOTAL HOSPITALS - 100% SUS", color = rgb(1,0,0.2))
+  valueBox(value = "122,724",icon = "fas fa-hospital",caption = "TOTAL ESTABLISHMENT - SUS (COMPETENCE 04/2021)", color = rgb(1,0,0.2))
 ```
 
 
-###  TOTAL PRIVATE HOSPITALS 
+###  TOTAL ESTABLISHMENTS WITH BEDS
 ```{r,echo = FALSE }
-  valueBox(value = "xxx",icon = "fas fa-hospital",caption = "TOTAL PRIVATE HOSPITALS", color = rgb(0.5,0.6,0.5))
+  valueBox(value = "8,763",icon = "fas fa-hospital",caption = "TOTAL ESTABLISHMENTS WITH BEDS (COMPETENCE 04/2021)", color = rgb(0.5,0.6,0.5))
 ```
 
 
-### TOTAL MIXED HOSPITALS (PUBLIC AND PRIVATE)
+### TOTAL ESTABLISHMENTS WITH HOSPITAL CHARACTERISTICS
 ```{r,echo = FALSE }
-valueBox(value = "xxxx",icon = "fas fa-hospital",caption = "TOTAL MIXED HOSPITALS (PUBLIC AND PRIVATE)",color = rgb(0.8,0.2,0.9))
+valueBox(value = "5,508",icon = "fas fa-hospital",caption = "TOTAL ESTABLISHMENTS WITH HOSPITAL CHARACTERISTICS (COMPETENCE 04/2021)",color = rgb(0.8,0.2,0.9))
 ```
 
 
-Row  
+Row
 ----------------------------------
 
 ### **EVOLUTION OF THE NUMBER OF VARIABLES IN THE SIHSUS DATABASE**
@@ -82,9 +82,22 @@ dat.ano  %>%
 ### **EVOLUTION OF THE NUMBER OF VARIABLES IN THE SIHSUS DATABASE**
 
 ```{r,echo = FALSE}
-valueBox(value = "xxxx",icon = "fas fa-hospital",caption = "TOTAL MIXED HOSPITALS (PUBLIC AND PRIVATE)",color = rgb(0.8,0.2,0.9))
-```
+dat.ano <- data.frame(Ano=(c(1992,1993,1994,1995,1996,1997, 1998,1999, 2000, 2001,2002,2003,2004, 2005, 2006,2007,2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020)),
+        Variavel=c(           35,  35,  39,  41,  41,  42,   41,  52,   60,   60,  65,  68,  69,   69,   75,  75,   86, 86,   86, 93,  93,   95,  113, 113, 113, 113, 113, 113, 113))
+dat.ano  %>%
+  ggplot( aes(x=factor(Ano), y=Variavel, group = 1)) +
+  geom_line(color="black",size=1) + 
+  xlab("YEAR")+
+  ylab("NUMBER OF VARIABLES")+
+  geom_point( shape=21, color="black", fill="chartreuse1", size=3) +
+  geom_text(aes(label = paste(Variavel)), parse = TRUE,
+            vjust = -0.3,hjust =1.7,size=2,angle=-45)+
+  scale_y_continuous(
+    limits = c(33, 114),
+    breaks = seq(33, 114, 10))+
+  theme_minimal()+theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=2))
 
+```
 
 
 
